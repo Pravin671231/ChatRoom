@@ -1,21 +1,19 @@
-import { Col, Container, Row } from "react-bootstrap";
 import "./App.css";
-import Sidebar from "./components/Sidebar";
-import ChatWindow from "./components/ChatWindow";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <>
-      <Container fluid>
-        <Row className="vh-100">
-          <Col md={4} className="bg-light p-3">
-            <Sidebar />
-          </Col>
-          <Col md={8} className="p-3">
-            <ChatWindow />
-          </Col>
-        </Row>
-      </Container>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

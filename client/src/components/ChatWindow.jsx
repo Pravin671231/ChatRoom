@@ -1,5 +1,5 @@
 import { Card } from "react-bootstrap";
-import { useChat } from "./context/ChatContext";
+import { useChat } from "../context/ChatContext";
 import { useState } from "react";
 
 const ChatWindow = () => {

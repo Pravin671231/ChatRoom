@@ -1,6 +1,6 @@
 import { ListGroup } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
-import { useChat } from "./context/ChatContext";
+import { useChat } from "../context/ChatContext";
 
 const Sidebar = () => {
   const { selectedChat, setSelectedChat } = useChat();
