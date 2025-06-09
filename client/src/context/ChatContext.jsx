@@ -7,12 +7,26 @@ export const ChatProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState({
+    Pravin: [
+      { sender: "Pravin", message: "Hi" },
+      { sender: "me", message: "Hello Pravin" },
+    ],
+    Kumar: [{ sender: "Kumar", message: "Hello from Kumar" }],
+  });
 
   const sendMessage = (text) => {
-    if (text.trim() && selectedChat) {
-      setMessages((prev) => [...prev, { sender: currentUser.email, text }]);
-    }
+    if (!selectedChat || !text.trim()) return;
+
+    const newMessage = {
+      sender: currentUser.email,
+      text,
+    };
+
+    setMessages((prev) => ({
+      ...prev,
+      [selectedChat]: [...prev([selectedChat] || []), newMessage],
+    }));
   };
 
   useEffect(() => {
@@ -28,8 +42,8 @@ export const ChatProvider = ({ children }) => {
         currentUser,
         selectedChat,
         setSelectedChat,
-        sendMessage,
         messages,
+        sendMessage,
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import { useChat } from "../context/ChatContext";
 import { useState } from "react";
 
 const ChatWindow = () => {
-  const { selectedChat, messages, sendMessage } = useChat();
+  const { currentUser, selectedChat, messages, sendMessage } = useChat();
   const [input, setInput] = useState("");
 
   //Handle send
@@ -13,19 +13,31 @@ const ChatWindow = () => {
     setInput("");
   };
 
+  const chatHistory = selectedChat ? messages[selectedChat] || [] : [];
+
   return (
     <>
       <Card className="h-100">
-        <Card.Header>Chat with {selectedChat}</Card.Header>
+        <Card.Header>
+          {selectedChat ? `Chat with {selectedChat}` : "Select a user"}
+        </Card.Header>
         <Card.Body className="overflow-auto">
-          {messages.map((msg, idx) => (
+          {chatHistory.length === 0 && (
+            <div className="text-muted text-center">No message yet</div>
+          )}
+          {chatHistory.map((msg, idx) => (
             <div
               key={idx}
               className={`mb-2 ${
-                msg.sender === "You" ? "text-end text-primary" : "text-start"
+                msg.sender === currentUser.email
+                  ? "text-end text-primary"
+                  : "text-start"
               }`}
             >
-              <strong>{msg.sender}: </strong>
+              <strong>
+                {msg.sender === currentUser.email ? "You" : msg.sender}:{" "}
+              </strong>{" "}
+              {msg.text}
               {msg.text}
             </div>
           ))}
@@ -38,8 +50,13 @@ const ChatWindow = () => {
               placeholder="Type your message....."
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              disabled={!selectedChat}
             />
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!selectedChat}
+            >
               Send
             </button>
           </form>
