@@ -21,7 +21,7 @@ const Login = () => {
   };
   return (
     <Card className="p-4 mx-auto" style={{ maxWidth: 400 }}>
-      <h4 className="mb-3">Register</h4>
+      <h4 className="mb-3">Login</h4>
       <Form onSubmit={handleLogin}>
         <Form.Group className="mb-2">
           <Form.Control
