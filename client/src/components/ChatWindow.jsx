@@ -19,7 +19,7 @@ const ChatWindow = () => {
     <>
       <Card className="h-100">
         <Card.Header>
-          {selectedChat ? `Chat with {selectedChat}` : "Select a user"}
+          {selectedChat ? `Chat with ${selectedChat}` : "Select a user"}
         </Card.Header>
         <Card.Body className="overflow-auto">
           {chatHistory.length === 0 && (
@@ -37,7 +37,6 @@ const ChatWindow = () => {
               <strong>
                 {msg.sender === currentUser.email ? "You" : msg.sender}:{" "}
               </strong>{" "}
-              {msg.text}
               {msg.text}
             </div>
           ))}

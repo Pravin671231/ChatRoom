@@ -25,7 +25,7 @@ export const ChatProvider = ({ children }) => {
 
     setMessages((prev) => ({
       ...prev,
-      [selectedChat]: [...prev([selectedChat] || []), newMessage],
+      [selectedChat]: [...(prev[selectedChat] || []), newMessage],
     }));
   };
 
