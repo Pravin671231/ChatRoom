@@ -3,8 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { useChat } from "../context/ChatContext";
 
 const Sidebar = () => {
-  const { selectedChat, setSelectedChat } = useChat();
-  const users = ["Ravi", "Kumar", "Prem"];
+  const { users, selectedChat, setSelectedChat } = useChat();
 
   return (
     <>
@@ -13,12 +12,12 @@ const Sidebar = () => {
         {users.map((user) => (
           <ListGroup.Item
             action
-            key={user}
-            active={selectedChat === user}
-            onClick={() => setSelectedChat(user)}
+            key={user._id}
+            active={selectedChat === user.email}
+            onClick={() => setSelectedChat(user.email)}
           >
             <FaUserCircle className="me-2" />
-            {user}
+            {user.email}
           </ListGroup.Item>
         ))}
       </ListGroup>
