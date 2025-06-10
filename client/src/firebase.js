@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDNDdRFJvmRsfRG8UdW5AEDyWtWauSNyKU",
+  apiKey: import.meta.env.VITE_API_KEY,
   authDomain: "chatroom-9df4b.firebaseapp.com",
   projectId: "chatroom-9df4b",
   storageBucket: "chatroom-9df4b.firebasestorage.app",
