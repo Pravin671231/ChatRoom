@@ -1,35 +1,33 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { auth } from "../firebase";
-import { useChat } from "../context/ChatContext";
-import Sidebar from "../components/Sidebar";
-import ChatWindow from "../components/ChatWindow";
-const Home = () => {
-  const { currentUser } = useChat();
+import Register from "../components/Register";
+import GuestChatWindow from "../components/GuestChatWindow";
+import GusetSidebar from "../components/GusetSidebar";
 
-  const handleLogout = () => {
-    auth.signOut();
-  };
-  return currentUser ? (
+const Home = () => {
+  return (
     <Container fluid>
       <Row className="vh-100">
-        <Col md={4} className="bg-light p-3">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h5>{currentUser.email}</h5>
-            <Button size="sm" onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
-          <Sidebar />
+        <Col md={5}>
+          <Register />
         </Col>
-        <Col md={8} className="p-3">
-          <ChatWindow />
+        <Col md={7} className="p-3">
+          <Container fluid>
+            <Row className="vh-100">
+              <Col md={4} className="bg-light p-3">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h5>Pravin@gmail.com</h5>
+                  <Button size="sm">Logout</Button>
+                </div>
+                <GusetSidebar />
+              </Col>
+              <Col md={8}>
+                <GuestChatWindow />
+              </Col>
+            </Row>
+          </Container>
         </Col>
       </Row>
     </Container>
-  ) : (
-    <div className="text-center mt-5">
-      <h4>Please login to access Chat</h4>
-    </div>
   );
 };
 
