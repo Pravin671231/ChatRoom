@@ -6,7 +6,7 @@ const API = axios.create({
 });
 
 export const createUser = (email) => API.post("/users", { email });
-export const getAllUser = () => API.get("/users");
+export const getAllUsers = () => API.get("/users");
 
 export const sendMessageToAPI = (data) => API.post("/messages", data);
 export const getMessagesBetweenUsers = (user1, user2) =>

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
-import { createUser, getAllUser, getMessagesBetweenUsers } from "../api";
+import { getAllUsers, getMessagesBetweenUsers, sendMessageToAPI } from "../api";
 
 const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
@@ -9,60 +9,88 @@ export const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [guestMessages, setGuestMessages] = useState([]);
 
-  const sendMessage = (text) => {
-    if (!selectedChat || !text.trim()) return;
+  // 🧪 Static guest users
+  const guestUsers = [
+    { _id: "1", email: "pravin@example.com" },
+    { _id: "2", email: "kumar@example.com" },
+    { _id: "3", email: "ravi@example.com" },
+  ];
 
-    const newMessage = {
-      sender: currentUser.email,
-      receiver: selectedChat,
+  // Return active users depending on auth status
+  const activeUsers = currentUser ? users : guestUsers;
+
+  // 📨 Send message handler
+  const sendMessage = async (text) => {
+    const message = {
       text,
+      sender: currentUser?.email || "guest",
+      receiver: selectedChat,
+      createdAt: Date.now(),
     };
 
-    setMessages((prev) => ({
-      ...prev,
-      [selectedChat]: [...(prev[selectedChat] || []), newMessage],
-    }));
-  };
-  // When user logs in, sync to backend
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      if (user) {
-        await createUser(user.email);
-        const res = await getAllUser();
-        const filtered = res.data.filter((u) => u.email !== user.email);
-        setUsers(filtered);
-      } else {
-        setUsers([]);
-        setMessages([]);
+    if (currentUser) {
+      try {
+        const res = await sendMessageToAPI(message);
+        setMessages((prev) => [...prev, res.data]);
+      } catch (error) {
+        console.error("Failed to send message to backend");
       }
+    } else {
+      setGuestMessages((prev) => [...prev, message]);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscripe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
     });
-    return () => unsubscribe();
+    return () => unsubscripe();
   }, []);
 
-  // When selected user changes, load message history
+  //users fetching
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (currentUser && selectedChat) {
-        const res = await getMessagesBetweenUsers(
-          currentUser.email,
-          selectedChat
-        );
+    if (!currentUser) return;
+
+    const fetchUsers = async () => {
+      try {
+        const res = await getAllUsers();
+        const allUsers = res.data.users;
+        const filtered = allUsers.filter((u) => u.email !== currentUser.email);
+        console.log(allUsers);
+
+        setUsers(filtered);
+      } catch (error) {
+        console.error(error);
       }
     };
-    fetchMessages();
+    fetchUsers();
+  }, [currentUser]);
+
+  //user message fetching
+  useEffect(() => {
+    if (currentUser && selectedChat) {
+      getMessagesBetweenUsers(currentUser.email, selectedChat)
+        .then((res) => setMessages(res.data))
+        .catch(console.error);
+    }
   }, [currentUser, selectedChat]);
 
   return (
     <ChatContext.Provider
       value={{
         currentUser,
+        setCurrentUser,
+        users,
+        setUsers,
+        guestUsers,
+        activeUsers,
         selectedChat,
         setSelectedChat,
         messages,
         sendMessage,
-        users,
+        guestMessages,
       }}
     >
       {children}

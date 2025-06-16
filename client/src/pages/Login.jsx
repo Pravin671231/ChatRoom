@@ -21,6 +21,11 @@ const Login = () => {
       alert(error.message);
     }
   };
+
+  //handleRegister Redirect
+  const handleRegisterRedirect = () => {
+    navigate("/");
+  };
   return (
     <Card className="p-4 mx-auto" style={{ maxWidth: 400 }}>
       <h4 className="mb-3">Login</h4>
@@ -49,6 +54,13 @@ const Login = () => {
           </Button>
         </Form.Group>
       </Form>
+      <hr />
+      <p>
+        Don't have a account{" "}
+        <Button variant="link" onClick={handleRegisterRedirect}>
+          Register
+        </Button>
+      </p>
     </Card>
   );
 };
