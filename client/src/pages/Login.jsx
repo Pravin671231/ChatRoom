@@ -12,9 +12,11 @@ const Login = () => {
   // handle login
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(email);
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }
