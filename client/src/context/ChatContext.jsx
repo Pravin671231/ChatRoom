@@ -1,13 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { getAllUsers, getMessagesBetweenUsers, sendMessageToAPI } from "../api";
 
 const ChatContext = createContext();
+
 export const ChatProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [users, setUsers] = useState([]); // Real users from backend
   const [selectedChat, setSelectedChat] = useState(null);
-  const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [guestMessages, setGuestMessages] = useState([]);
 
@@ -55,11 +56,9 @@ export const ChatProvider = ({ children }) => {
 
     const fetchUsers = async () => {
       try {
-        const res = await getAllUsers();
+        const res = await getAllUsers();        
         const allUsers = res.data.users;
         const filtered = allUsers.filter((u) => u.email !== currentUser.email);
-        console.log(allUsers);
-
         setUsers(filtered);
       } catch (error) {
         console.error(error);
