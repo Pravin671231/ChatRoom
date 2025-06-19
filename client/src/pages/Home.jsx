@@ -6,11 +6,11 @@ import GusetSidebar from "../components/GusetSidebar";
 const Home = () => {
   return (
     <Container fluid>
-      <Row className="vh-100">
+      <Row className="h-75">
         <Col md={5}>
           <Register />
         </Col>
-        <Col md={7} className="p-3">
+        <Col md={7}>
           <Container fluid>
             <Row className="vh-100">
               <Col md={4} className="bg-light p-3">
